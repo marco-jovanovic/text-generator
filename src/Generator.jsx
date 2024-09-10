@@ -34,7 +34,7 @@ function Generator() {
       </form>
 
       <div className="text">
-        {paragraph.map((item, paraId) => {
+        {paragraph.map((item) => {
           return <p key={paraId}>{item}</p>;
         })}
       </div>
