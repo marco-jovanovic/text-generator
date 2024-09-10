@@ -1,38 +1,43 @@
-import React, { useState } from 'react';
-
+import React, { useState, useRef, useEffect } from 'react';
+import { nanoid } from 'nanoid';
 import { text } from '../data';
 
 function Generator() {
   const [paragraph, setParagraph] = useState(text);
   const [count, setCount] = useState(1);
 
-  console.log(paragraph.length);
+  const paraId = nanoid();
 
-  const getFormValue = (e) => {
-    setCount(e.target.value);
+  const inputRef = useRef();
 
-    console.log(count);
+  const submitForm = (e) => {
+    setCount(inputRef.current.value);
+    e.preventDefault();
   };
+
+  useEffect(() => {
+    setParagraph(text.slice(0, count));
+  }, [count]);
 
   return (
     <div className="container">
       <h3 className="title">Tire od boring lipsum text?</h3>
-      <form>
-        <span>Paragraphs:</span>
-        <select onChange={getFormValue} value={count}>
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-          <option>6</option>
-          <option>7</option>
-          <option>8</option>
-          <option>9</option>
-        </select>
+      <form onSubmit={submitForm}>
+        <input
+          type="number"
+          placeholder="1"
+          min="1"
+          max="9"
+          ref={inputRef}
+        ></input>
+        <span>Paragraphs:</span> <button className="btn">Generate</button>
       </form>
 
-      <div className="text">{paragraph.slice(0, count)}</div>
+      <div className="text">
+        {paragraph.map((item, paraId) => {
+          return <p key={paraId}>{item}</p>;
+        })}
+      </div>
     </div>
   );
 }
